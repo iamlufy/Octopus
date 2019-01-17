@@ -1,7 +1,7 @@
 package cn.chenhuanming.octopus.exception;
 
 import cn.chenhuanming.octopus.model.CellPosition;
-import cn.chenhuanming.octopus.model.Field;
+import cn.chenhuanming.octopus.core.Field;
 import lombok.Getter;
 import lombok.Setter;
 

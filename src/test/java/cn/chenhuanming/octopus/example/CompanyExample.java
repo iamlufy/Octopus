@@ -1,13 +1,13 @@
 package cn.chenhuanming.octopus.example;
 
 import cn.chenhuanming.octopus.core.Octopus;
-import cn.chenhuanming.octopus.core.SheetReader;
+import cn.chenhuanming.octopus.core.read.SheetReader;
 import cn.chenhuanming.octopus.entity.Address;
 import cn.chenhuanming.octopus.entity.Company;
 import cn.chenhuanming.octopus.model.CheckedData;
-import cn.chenhuanming.octopus.model.ConfigReader;
+import cn.chenhuanming.octopus.core.config.ConfigReader;
 import cn.chenhuanming.octopus.model.DefaultCellPosition;
-import cn.chenhuanming.octopus.model.XmlConfigReader;
+import cn.chenhuanming.octopus.core.read.XmlConfigReader;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.fluttercode.datafactory.impl.DataFactory;
 import org.junit.Before;

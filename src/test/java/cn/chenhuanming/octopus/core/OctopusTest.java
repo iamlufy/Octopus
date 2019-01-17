@@ -1,6 +1,6 @@
 package cn.chenhuanming.octopus.core;
 
-import cn.chenhuanming.octopus.model.ConfigReader;
+import cn.chenhuanming.octopus.core.config.ConfigReader;
 import org.junit.Test;
 
 import java.io.FileOutputStream;

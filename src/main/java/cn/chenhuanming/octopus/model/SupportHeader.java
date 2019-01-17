@@ -1,6 +1,7 @@
 package cn.chenhuanming.octopus.model;
 
-import cn.chenhuanming.octopus.model.formatter.Formatter;
+import cn.chenhuanming.octopus.core.Field;
+import cn.chenhuanming.octopus.formatter.Formatter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.apache.poi.ss.usermodel.CellStyle;

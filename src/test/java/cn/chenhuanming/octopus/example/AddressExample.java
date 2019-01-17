@@ -2,7 +2,7 @@ package cn.chenhuanming.octopus.example;
 
 import cn.chenhuanming.octopus.core.Octopus;
 import cn.chenhuanming.octopus.entity.Address;
-import cn.chenhuanming.octopus.model.ConfigReader;
+import cn.chenhuanming.octopus.core.config.ConfigReader;
 import org.fluttercode.datafactory.impl.DataFactory;
 import org.junit.Before;
 import org.junit.Test;

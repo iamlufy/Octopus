@@ -1,8 +1,10 @@
 package cn.chenhuanming.octopus.core;
 
-import cn.chenhuanming.octopus.model.ConfigReader;
+import cn.chenhuanming.octopus.core.write.DefaultHeaderWriter;
+import cn.chenhuanming.octopus.core.write.HeaderWriter;
+import cn.chenhuanming.octopus.core.config.ConfigReader;
 import cn.chenhuanming.octopus.model.DefaultCellPosition;
-import cn.chenhuanming.octopus.model.XmlConfigReader;
+import cn.chenhuanming.octopus.core.read.XmlConfigReader;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Test;

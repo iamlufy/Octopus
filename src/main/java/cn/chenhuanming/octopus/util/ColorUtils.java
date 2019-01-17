@@ -88,4 +88,14 @@ public class ColorUtils {
         return result == null ? HSSFColor.HSSFColorPredefined.AUTOMATIC.getColor() : result;
     }
 
+
+    public static Color[] convertBorderColor(String borderColor) {
+        Color[] result = new Color[4];
+        String[] split = borderColor.split(",");
+        for (int i = 0; i < split.length; i++) {
+            Color color = hex2Rgb(split[i]);
+            result[i] = color;
+        }
+        return result;
+    }
 }
