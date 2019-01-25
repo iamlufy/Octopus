@@ -2,6 +2,7 @@ package cn.chenhuanming.octopus.core.temp.reader;
 
 import cn.chenhuanming.octopus.core.config.Config;
 import cn.chenhuanming.octopus.core.temp.CellDefinitionReader;
+import cn.chenhuanming.octopus.core.temp.DefaultExcelConfig;
 import cn.chenhuanming.octopus.core.temp.ExcelConfig;
 import cn.chenhuanming.octopus.core.temp.writer.DefaultWriteExcelConfig;
 import cn.chenhuanming.octopus.core.temp.writer.WriteExcelConfig;
@@ -20,7 +21,7 @@ public abstract class AbstractCellDefinitionReader implements CellDefinitionRead
      *
      * @return
      */
-    public abstract Config readConfig();
+    public abstract DefaultExcelConfig readConfig();
 
     @Override
     public ReadExcelConfig loadReadExcelConfig() throws IOException {

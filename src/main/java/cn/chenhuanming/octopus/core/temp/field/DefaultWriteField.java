@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 public class DefaultWriteField extends AbstractField implements ImportValidation {
 
 
-    private boolean blankAble;
+    private boolean blankable;
 
     private List<String> options;
 

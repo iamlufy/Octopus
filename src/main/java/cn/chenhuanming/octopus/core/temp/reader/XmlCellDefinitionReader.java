@@ -1,5 +1,6 @@
 package cn.chenhuanming.octopus.core.temp.reader;
 
+import cn.chenhuanming.octopus.core.config.AbstractXMLConfigReader;
 import cn.chenhuanming.octopus.core.config.Config;
 import cn.chenhuanming.octopus.core.config.DefaultConfig;
 import cn.chenhuanming.octopus.core.temp.DefaultExcelConfig;
@@ -63,7 +64,7 @@ public class XmlCellDefinitionReader extends AbstractCellDefinitionReader {
     
 
     @Override
-    public Config readConfig() {
+    public DefaultExcelConfig readConfig() {
         Document document;
         try {
             validateXML(new StreamSource(is));
@@ -73,8 +74,8 @@ public class XmlCellDefinitionReader extends AbstractCellDefinitionReader {
         }
 
         Element root = document.getDocumentElement();
-//        DefaultExcelConfig config = new DefaultExcelConfig();
-        DefaultConfig config = new DefaultConfig();
+        DefaultExcelConfig config = new DefaultExcelConfig();
+//        DefaultConfig config = new DefaultConfig();
         if (!XMLConfig.Root.name.equals(root.getTagName())) {
             throw new IllegalArgumentException("xml config file: must has a root tag named " +XMLConfig.Root.name);
         }
@@ -153,19 +154,16 @@ public class XmlCellDefinitionReader extends AbstractCellDefinitionReader {
         NodeList children = node.getChildNodes();
 
         List<MappedField> mappedFieldList = Lists.newArrayList();
+
+        Class headerType = node.getNodeName().equals(XMLConfig.Root.name) ? classType : (field.getPicker() != null ? field.getPicker().getReturnType() : null);
         for (int i = 0; i < children.getLength(); i++) {
             Node item = children.item(i);
             if (item.getNodeType() != Node.ELEMENT_NODE || (!item.getNodeName().equals(XMLConfig.Field.name) && !item.getNodeName().equals(XMLConfig.Header.name))) {
                 continue;
             }
-            if (org.apache.commons.lang3.StringUtils.isNotBlank(field.getFieldProperty().getName())) {
-
-                Method picker = ReflectionUtils.readMethod(classType, field.getFieldProperty().getName());
-                Class headerType = node.getNodeName().equals(XMLConfig.Root.name) ? classType : (picker != null ? picker.getReturnType() : null);
-                mappedFieldList.add(getField(children.item(i), headerType));
-
-            }
+            mappedFieldList.add(getField(children.item(i), headerType));
         }
+
         field.setChildren(mappedFieldList);
         return field;
     }
