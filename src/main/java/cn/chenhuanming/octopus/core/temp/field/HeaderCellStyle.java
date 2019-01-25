@@ -10,7 +10,7 @@ import java.awt.*;
  * @author zhuangzf
  * @date 2019/1/17 8:50
  */
-public interface HeaderCellStyle extends Field {
+public interface HeaderCellStyle {
     short getHeaderFontSize();
 
     Color getHeaderColor();

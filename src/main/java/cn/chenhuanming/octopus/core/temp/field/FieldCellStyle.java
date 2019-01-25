@@ -11,7 +11,7 @@ import java.awt.*;
  * @author zhuangzf
  * @date 2019/1/17 8:42
  */
-public interface FieldCellStyle extends Field  {
+public interface FieldCellStyle  {
     short getFontSize();
 
     Color getColor();

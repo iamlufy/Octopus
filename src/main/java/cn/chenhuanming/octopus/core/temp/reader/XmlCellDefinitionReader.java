@@ -1,7 +1,12 @@
 package cn.chenhuanming.octopus.core.temp.reader;
 
+import cn.chenhuanming.octopus.core.config.Config;
+import cn.chenhuanming.octopus.core.config.DefaultConfig;
 import cn.chenhuanming.octopus.core.temp.DefaultExcelConfig;
 import cn.chenhuanming.octopus.core.temp.ExcelConfig;
+import cn.chenhuanming.octopus.core.temp.field.FieldProperty;
+import cn.chenhuanming.octopus.core.temp.field.FieldStyle;
+import cn.chenhuanming.octopus.core.temp.field.MappedField;
 import cn.chenhuanming.octopus.formatter.DateFormatter;
 import cn.chenhuanming.octopus.formatter.DefaultFormatterContainer;
 import cn.chenhuanming.octopus.formatter.Formatter;
@@ -12,6 +17,7 @@ import cn.chenhuanming.octopus.util.ColorUtils;
 import cn.chenhuanming.octopus.util.ReflectionUtils;
 import cn.chenhuanming.octopus.util.StringUtils;
 import cn.chenhuanming.octopus.util.StyleUtils;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.util.IOUtils;
 import org.w3c.dom.Document;
@@ -34,6 +40,7 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -56,7 +63,7 @@ public class XmlCellDefinitionReader extends AbstractCellDefinitionReader {
     
 
     @Override
-    public ExcelConfig readConfig() {
+    public Config readConfig() {
         Document document;
         try {
             validateXML(new StreamSource(is));
@@ -66,8 +73,8 @@ public class XmlCellDefinitionReader extends AbstractCellDefinitionReader {
         }
 
         Element root = document.getDocumentElement();
-        ExcelConfig config = new DefaultExcelConfig();
-
+//        DefaultExcelConfig config = new DefaultExcelConfig();
+        DefaultConfig config = new DefaultConfig();
         if (!XMLConfig.Root.name.equals(root.getTagName())) {
             throw new IllegalArgumentException("xml config file: must has a root tag named " +XMLConfig.Root.name);
         }
@@ -87,7 +94,7 @@ public class XmlCellDefinitionReader extends AbstractCellDefinitionReader {
         Node formattersNode = root.getElementsByTagName(XMLConfig.Formatters.name).item(0);
         config.setFormatterContainer(readFormatter(formattersNode));
 
-        Field field = getField(root, classType);
+        MappedField field = getField(root, classType);
 
         config.setFields(field.getChildren());
 
@@ -129,15 +136,14 @@ public class XmlCellDefinitionReader extends AbstractCellDefinitionReader {
 
 
 
-    private Field getField(Node node, Class classType) {
-        DefaultField field = new DefaultField();
+    private MappedField getField(Node node, Class classType) {
+        MappedField field = new MappedField();
 
-        setBaseConfig(field, node);
-
-        setCellStyleConfig(field, node);
-
-        setHeaderCellStyleConfig(field, node);
-
+        FieldProperty fieldProperty = setBaseConfig( node);
+        FieldStyle fieldStyle = setCellStyleConfig(node);
+        field.setFieldProperty(fieldProperty);
+        field.setFieldStyle(fieldStyle);
+        // TODO: 2019/1/21
         setInvoker(field, classType);
 
         if (node.getNodeName().equals(XMLConfig.Field.name)) {
@@ -146,31 +152,39 @@ public class XmlCellDefinitionReader extends AbstractCellDefinitionReader {
 
         NodeList children = node.getChildNodes();
 
-        Class headerType = node.getNodeName().equals(XMLConfig.Root.name) ? classType : (field.getPicker() != null ? field.getPicker().getReturnType() : null);
+        List<MappedField> mappedFieldList = Lists.newArrayList();
         for (int i = 0; i < children.getLength(); i++) {
             Node item = children.item(i);
             if (item.getNodeType() != Node.ELEMENT_NODE || (!item.getNodeName().equals(XMLConfig.Field.name) && !item.getNodeName().equals(XMLConfig.Header.name))) {
                 continue;
             }
-            field.addChildren(getField(children.item(i), headerType));
+            if (org.apache.commons.lang3.StringUtils.isNotBlank(field.getFieldProperty().getName())) {
+
+                Method picker = ReflectionUtils.readMethod(classType, field.getFieldProperty().getName());
+                Class headerType = node.getNodeName().equals(XMLConfig.Root.name) ? classType : (picker != null ? picker.getReturnType() : null);
+                mappedFieldList.add(getField(children.item(i), headerType));
+
+            }
         }
+        field.setChildren(mappedFieldList);
         return field;
     }
 
 
-    private void setBaseConfig(DefaultField field, Node node) {
+    private FieldProperty setBaseConfig( Node node) {
         String name = getAttribute(node, XMLConfig.Field.Attribute.NAME);
+        FieldProperty fieldProperty = new FieldProperty();
         if (!StringUtils.isEmpty(name)) {
-            field.setName(name);
+            fieldProperty.setName(name);
         }
         String desc = getAttribute(node, XMLConfig.Field.Attribute.DESCRIPTION);
         if (!StringUtils.isEmpty(desc)) {
-            field.setDescription(desc);
+            fieldProperty.setDescription(desc);
         }
 
         String dateFormat = getAttribute(node, XMLConfig.Field.Attribute.DATE_FORMAT);
         if (!StringUtils.isEmpty(dateFormat)) {
-            field.setDateFormat(new DateFormatter(dateFormat));
+            fieldProperty.setDateFormat(new DateFormatter(dateFormat));
         }
 
         //read formatter
@@ -181,42 +195,46 @@ public class XmlCellDefinitionReader extends AbstractCellDefinitionReader {
                 if (!Formatter.class.isAssignableFrom(formatterClass)) {
                     log.error(formatterStr + " is not subclass of cn.chenhuanming.octopus.model.formatter.Formatters");
                 } else {
-                    field.setFormatter((Formatter) formatterClass.newInstance());
+                    fieldProperty.setFormatter((Formatter) formatterClass.newInstance());
                 }
             } catch (Exception e) {
                 log.warn(formatterStr + " may not have a default constructor");
             }
         }
+        return fieldProperty;
     }
 
-    private void setCellStyleConfig(DefaultField field, Node node) {
+    private FieldStyle setCellStyleConfig( Node node) {
+        FieldStyle fieldStyle = new FieldStyle();
         String fontSize = getAttribute(node, XMLConfig.Field.Attribute.FONT_SIZE);
         if (!StringUtils.isEmpty(fontSize)) {
-            field.setFontSize(Short.parseShort(fontSize));
+            fieldStyle.setFontSize(Short.parseShort(fontSize));
         }
         String color = getAttribute(node, XMLConfig.Field.Attribute.COLOR);
         if (!StringUtils.isEmpty(color)) {
-            field.setColor(ColorUtils.hex2Rgb(color));
+            fieldStyle.setColor(ColorUtils.hex2Rgb(color));
         }
         String isBold = getAttribute(node, XMLConfig.Field.Attribute.IS_BOLD);
         if (!StringUtils.isEmpty(isBold)) {
-            field.setBold(Boolean.parseBoolean(isBold));
+            fieldStyle.setBold(Boolean.parseBoolean(isBold));
         }
         String foregroundColor = getAttribute(node, XMLConfig.Field.Attribute.FOREGROUND_COLOR);
         if (!StringUtils.isEmpty(foregroundColor)) {
-            field.setForegroundColor(ColorUtils.hex2Rgb(foregroundColor));
+            fieldStyle.setForegroundColor(ColorUtils.hex2Rgb(foregroundColor));
         }
         String border = getAttribute(node, XMLConfig.Field.Attribute.BORDER);
         if (!StringUtils.isEmpty(border)) {
-            field.setBorder(StyleUtils.convertBorder(border));
+            fieldStyle.setBorder(StyleUtils.convertBorder(border));
         }
         String borderColor = getAttribute(node, XMLConfig.Field.Attribute.BORDER_COLOR);
         if (!StringUtils.isEmpty(borderColor)) {
-            field.setBorderColor(ColorUtils.convertBorderColor(borderColor));
+            fieldStyle.setBorderColor(ColorUtils.convertBorderColor(borderColor));
         }
+        setHeaderCellStyleConfig(fieldStyle, node);
+        return fieldStyle;
     }
 
-    private void setHeaderCellStyleConfig(DefaultField field, Node node) {
+    private void setHeaderCellStyleConfig(FieldStyle field, Node node) {
         String fontSize = getAttribute(node, XMLConfig.Header.Attribute.HEADER_FONT_SIZE);
         if (!StringUtils.isEmpty(fontSize)) {
             field.setHeaderFontSize(Short.parseShort(fontSize));
@@ -243,23 +261,23 @@ public class XmlCellDefinitionReader extends AbstractCellDefinitionReader {
         }
     }
 
-    private void setInvoker(DefaultField field, Class classType) {
-        if (classType == null || StringUtils.isEmpty(field.getName())) {
+    private void setInvoker(MappedField field, Class classType) {
+        if (classType == null || StringUtils.isEmpty(field.getFieldProperty().getName())) {
             return;
         }
         //set picker
-        Method picker = ReflectionUtils.readMethod(classType, field.getName());
+        Method picker = ReflectionUtils.readMethod(classType, field.getFieldProperty().getName());
         field.setPicker(picker);
 
         //set pusher
-        Method pusher = ReflectionUtils.writeMethod(classType, field.getName());
+        Method pusher = ReflectionUtils.writeMethod(classType, field.getFieldProperty().getName());
         field.setPusher(pusher);
     }
 
-    private void setImportValidation(DefaultField field, Node node) {
+    private void setImportValidation(MappedField field, Node node) {
         String isBlankable = getAttribute(node, XMLConfig.Field.Attribute.IS_BLANKABLE);
         if (!StringUtils.isEmpty(isBlankable)) {
-            field.setBlankable(Boolean.parseBoolean(isBlankable));
+            field.setBlankAble(Boolean.parseBoolean(isBlankable));
         }
 
         String regex = getAttribute(node, XMLConfig.Field.Attribute.REGEX);
@@ -362,7 +380,7 @@ public class XmlCellDefinitionReader extends AbstractCellDefinitionReader {
 
                 String DATE_FORMAT = "date-format";
                 String FORMATTER = "formatter";
-                String IS_BLANKABLE = "is-blankable";
+                String IS_BLANKABLE = "is-blankAble";
                 String REGEX = "regex";
                 String OPTIONS = "options";
             }

@@ -13,6 +13,14 @@
         <lombok-version>1.16.14</lombok-version>
         <slf4j-version>1.7.25</slf4j-version>
         <log4j2-version>2.11.1</log4j2-version>
+
+        <!--commons-->
+        <commons-beanutils.version>1.9.2</commons-beanutils.version>
+        <commons-collections.version>3.2.1</commons-collections.version>
+        <commons-lang3.version>3.4</commons-lang3.version>
+        <!--commons-->
+        <guava.version>17.0</guava.version>
+
     </properties>
 
     <dependencies>
@@ -72,6 +80,31 @@
             <artifactId>log4j-slf4j-impl</artifactId>
             <version>${log4j2-version}</version>
             <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>${commons-beanutils.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>${commons-collections.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
 
     </dependencies>

@@ -14,7 +14,7 @@ import org.apache.poi.ss.usermodel.Workbook;
  * Created at 2019-01-11
  */
 @Data
-public abstract class FieldStyle implements FieldCellStyle, HeaderCellStyle {
+public  class FieldStyle implements FieldCellStyle, HeaderCellStyle {
     /**
      * cell style
      */

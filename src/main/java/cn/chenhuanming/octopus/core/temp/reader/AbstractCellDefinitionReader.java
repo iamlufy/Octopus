@@ -1,5 +1,6 @@
 package cn.chenhuanming.octopus.core.temp.reader;
 
+import cn.chenhuanming.octopus.core.config.Config;
 import cn.chenhuanming.octopus.core.temp.CellDefinitionReader;
 import cn.chenhuanming.octopus.core.temp.ExcelConfig;
 import cn.chenhuanming.octopus.core.temp.writer.DefaultWriteExcelConfig;
@@ -19,17 +20,19 @@ public abstract class AbstractCellDefinitionReader implements CellDefinitionRead
      *
      * @return
      */
-    public abstract ExcelConfig readConfig();
+    public abstract Config readConfig();
 
     @Override
     public ReadExcelConfig loadReadExcelConfig() throws IOException {
-        ReadExcelConfig readExcelConfig = new DefaultReadExcelConfig(readConfig());
-        return readExcelConfig;
+//        ReadExcelConfig readExcelConfig = new DefaultReadExcelConfig(readConfig());
+//        return readExcelConfig;
+        return null;
     }
 
     @Override
     public WriteExcelConfig loadWriteExcelConfig() throws IOException {
-        WriteExcelConfig writeExcelConfig = new DefaultWriteExcelConfig(readConfig());
-        return writeExcelConfig;
+//        WriteExcelConfig writeExcelConfig = new DefaultWriteExcelConfig(readConfig());
+//        return writeExcelConfig;
+        return null;
     }
 }
