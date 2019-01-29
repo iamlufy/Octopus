@@ -4,6 +4,7 @@ package cn.chenhuanming.octopus.core.write;
 import cn.chenhuanming.octopus.core.Field;
 import cn.chenhuanming.octopus.core.config.Config;
 import cn.chenhuanming.octopus.core.config.ConfigReader;
+import cn.chenhuanming.octopus.core.temp.ExcelConfig;
 import cn.chenhuanming.octopus.model.*;
 import cn.chenhuanming.octopus.formatter.Formatter;
 import cn.chenhuanming.octopus.util.CellUtils;
@@ -40,7 +41,7 @@ public abstract class AbstractSheetWriter<T> implements SheetWriter<T> {
             return CellUtils.POSITION_ZERO_ZERO;
         }
 
-        Config config = configReader.getConfig();
+        ExcelConfig config = configReader.getConfig();
 
         Class dataType = data.iterator().next().getClass();
         if (config.getClassType() != dataType) {

@@ -14,5 +14,5 @@ import java.util.List;
 public class DefaultExcelConfig implements ExcelConfig {
     private Class classType;
     private FormatterContainer formatterContainer;
-    private List<MappedField> fields;
+    private List<? extends MappedField> fields;
 }

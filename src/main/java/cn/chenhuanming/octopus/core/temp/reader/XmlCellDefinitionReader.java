@@ -7,6 +7,7 @@ import cn.chenhuanming.octopus.core.temp.DefaultExcelConfig;
 import cn.chenhuanming.octopus.core.temp.ExcelConfig;
 import cn.chenhuanming.octopus.core.temp.field.FieldProperty;
 import cn.chenhuanming.octopus.core.temp.field.FieldStyle;
+import cn.chenhuanming.octopus.core.temp.field.FullField;
 import cn.chenhuanming.octopus.core.temp.field.MappedField;
 import cn.chenhuanming.octopus.formatter.DateFormatter;
 import cn.chenhuanming.octopus.formatter.DefaultFormatterContainer;
@@ -95,7 +96,7 @@ public class XmlCellDefinitionReader extends AbstractCellDefinitionReader {
         Node formattersNode = root.getElementsByTagName(XMLConfig.Formatters.name).item(0);
         config.setFormatterContainer(readFormatter(formattersNode));
 
-        MappedField field = getField(root, classType);
+        FullField field = getField(root, classType);
 
         config.setFields(field.getChildren());
 
@@ -137,8 +138,8 @@ public class XmlCellDefinitionReader extends AbstractCellDefinitionReader {
 
 
 
-    private MappedField getField(Node node, Class classType) {
-        MappedField field = new MappedField();
+    private FullField getField(Node node, Class classType) {
+        FullField field = new FullField();
 
         FieldProperty fieldProperty = setBaseConfig( node);
         FieldStyle fieldStyle = setCellStyleConfig(node);
@@ -153,7 +154,7 @@ public class XmlCellDefinitionReader extends AbstractCellDefinitionReader {
 
         NodeList children = node.getChildNodes();
 
-        List<MappedField> mappedFieldList = Lists.newArrayList();
+        List<FullField> mappedFieldList = Lists.newArrayList();
 
         Class headerType = node.getNodeName().equals(XMLConfig.Root.name) ? classType : (field.getPicker() != null ? field.getPicker().getReturnType() : null);
         for (int i = 0; i < children.getLength(); i++) {
@@ -259,7 +260,7 @@ public class XmlCellDefinitionReader extends AbstractCellDefinitionReader {
         }
     }
 
-    private void setInvoker(MappedField field, Class classType) {
+    private void setInvoker(FullField field, Class classType) {
         if (classType == null || StringUtils.isEmpty(field.getFieldProperty().getName())) {
             return;
         }
@@ -272,10 +273,10 @@ public class XmlCellDefinitionReader extends AbstractCellDefinitionReader {
         field.setPusher(pusher);
     }
 
-    private void setImportValidation(MappedField field, Node node) {
+    private void setImportValidation(FullField field, Node node) {
         String isBlankable = getAttribute(node, XMLConfig.Field.Attribute.IS_BLANKABLE);
         if (!StringUtils.isEmpty(isBlankable)) {
-            field.setBlankAble(Boolean.parseBoolean(isBlankable));
+            field.setBlankable(Boolean.parseBoolean(isBlankable));
         }
 
         String regex = getAttribute(node, XMLConfig.Field.Attribute.REGEX);

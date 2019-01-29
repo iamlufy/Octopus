@@ -14,7 +14,7 @@ public interface ExcelConfig {
 
     FormatterContainer getFormatterContainer();
 
-    List<MappedField> getFields();
+    List<? extends MappedField> getFields();
 
 
 }
