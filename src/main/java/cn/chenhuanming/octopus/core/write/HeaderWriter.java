@@ -12,5 +12,5 @@ import java.util.List;
  * Created at 2018/12/15
  */
 public interface HeaderWriter {
-    CellPosition drawHeader(Sheet sheet, CellPosition startPoint, List<DefaultWriteField> fields);
+    CellPosition drawHeader(Sheet sheet, CellPosition startPoint, List<Field> fields);
 }

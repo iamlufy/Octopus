@@ -7,5 +7,5 @@ import cn.chenhuanming.octopus.core.temp.ExcelConfig;
  * Created at 2018/12/10
  */
 public interface ConfigReader {
-    ExcelConfig getConfig();
+    Config getConfig();
 }

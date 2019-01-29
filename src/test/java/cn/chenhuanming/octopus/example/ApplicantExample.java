@@ -2,6 +2,7 @@ package cn.chenhuanming.octopus.example;
 
 import cn.chenhuanming.octopus.core.AbstractWriterTest;
 import cn.chenhuanming.octopus.core.Octopus;
+import cn.chenhuanming.octopus.core.config.Config;
 import cn.chenhuanming.octopus.core.config.ConfigReader;
 import org.junit.Test;
 
@@ -19,7 +20,7 @@ public class ApplicantExample extends AbstractWriterTest {
         FileOutputStream os = new FileOutputStream(rootPath + "/applicator.xlsx");
 
         ConfigReader configReader = Octopus.getXMLConfigReader(this.getClass().getClassLoader().getResourceAsStream("applicants.xml"));
-
+        Config config = configReader.getConfig();
         Octopus.writeOneSheet(os, configReader, "test", applicantsList);
     }
 }

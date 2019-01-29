@@ -60,7 +60,7 @@ public class CheckedSheetReader<T> extends DefaultSheetReader<CheckedData<T>> {
     @Override
     protected CheckedData<T> newInstance(Class classType) {
         try {
-            T data = (T) configReader.getConfig().getClassType().newInstance();
+            T data = (T) excelConfig.getConfig().getClassType().newInstance();
             checkedData = new CheckedData<>();
             checkedData.setData(data);
             return checkedData;

@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
+ * 匹配配置文件的属性，含有扩展属性
+ *
  * @author zhuangzf
  * @date 2019/1/29 10:19
  */
@@ -25,6 +27,11 @@ public class FullField extends MappedField  implements ImportValidation {
 
     private Method picker;
     private Method pusher;
+
+    /**
+     * excel单元格格式
+     */
+    private FieldStyle fieldStyle;
 
     public FullField() {
 

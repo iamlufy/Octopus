@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class DefaultHeaderWriter implements HeaderWriter {
     @Override
-    public CellPosition drawHeader(Sheet sheet, CellPosition startPoint, List<DefaultWriteField> fields) {
+    public CellPosition drawHeader(Sheet sheet, CellPosition startPoint, List<Field> fields) {
         DefaultField fake = new DefaultField(fields);
 
         SupportHeader fakeHeader = new SupportHeader(fake);

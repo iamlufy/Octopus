@@ -33,7 +33,7 @@ public class DefaultSheetReader<T> extends AbstractSheetReader<T> {
                 Cell cell = sheet.getRow(row).getCell(col);
                 String str;
                 if (CellUtils.isDate(cell)) {
-                    Formatter<Date> dateFormatter = configReader.getConfig().getFormatterContainer().get(Date.class);
+                    Formatter<Date> dateFormatter = excelConfig.getConfig().getFormatterContainer().get(Date.class);
                     str = dateFormatter.format(DateUtil.getJavaDate(cell.getNumericCellValue()));
                 } else {
                     str = CellUtils.getCellValue(sheet, row, col, field.getDefaultValue());

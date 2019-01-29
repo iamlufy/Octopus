@@ -8,10 +8,6 @@ import cn.chenhuanming.octopus.core.temp.ExcelConfig;
  * @author zhuangzf
  */
 public interface ReadExcelConfig {
-    /**
-     * 组合excelConfig，不通过继承
-     */
-    void setExcelConfig(ExcelConfig excelConfig);
 
     ExcelConfig getExcelConfig();
 }

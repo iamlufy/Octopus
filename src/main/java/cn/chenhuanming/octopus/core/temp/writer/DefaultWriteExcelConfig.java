@@ -4,6 +4,8 @@ import cn.chenhuanming.octopus.core.temp.ExcelConfig;
 import cn.chenhuanming.octopus.core.temp.reader.ReadExcelConfig;
 
 /**
+ * 默认写Excel配置类
+ *
  * @author zhuangzf
  * @date 2019/1/16 19:20
  */
@@ -14,10 +16,6 @@ public class DefaultWriteExcelConfig implements WriteExcelConfig {
         this.excelConfig = excelConfig;
     }
 
-    @Override
-    public void setExcelConfig(ExcelConfig excelConfig) {
-        this.excelConfig = excelConfig;
-    }
 
     @Override
     public ExcelConfig getExcelConfig() {

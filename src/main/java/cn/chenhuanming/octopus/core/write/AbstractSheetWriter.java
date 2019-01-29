@@ -41,7 +41,7 @@ public abstract class AbstractSheetWriter<T> implements SheetWriter<T> {
             return CellUtils.POSITION_ZERO_ZERO;
         }
 
-        ExcelConfig config = configReader.getConfig();
+        Config config = configReader.getConfig();
 
         Class dataType = data.iterator().next().getClass();
         if (config.getClassType() != dataType) {

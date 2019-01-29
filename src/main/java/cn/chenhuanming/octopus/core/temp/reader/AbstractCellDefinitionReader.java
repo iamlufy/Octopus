@@ -25,15 +25,11 @@ public abstract class AbstractCellDefinitionReader implements CellDefinitionRead
 
     @Override
     public ReadExcelConfig loadReadExcelConfig() throws IOException {
-//        ReadExcelConfig readExcelConfig = new DefaultReadExcelConfig(readConfig());
-//        return readExcelConfig;
-        return null;
+        return new DefaultReadExcelConfig(readConfig());
     }
 
     @Override
     public WriteExcelConfig loadWriteExcelConfig() throws IOException {
-//        WriteExcelConfig writeExcelConfig = new DefaultWriteExcelConfig(readConfig());
-//        return writeExcelConfig;
-        return null;
+        return new DefaultWriteExcelConfig(readConfig());
     }
 }
