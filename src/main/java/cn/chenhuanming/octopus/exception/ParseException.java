@@ -1,5 +1,6 @@
 package cn.chenhuanming.octopus.exception;
 
+import cn.chenhuanming.octopus.core.temp.field.impl.FullField;
 import cn.chenhuanming.octopus.model.CellPosition;
 import cn.chenhuanming.octopus.core.Field;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import lombok.Setter;
 public class ParseException extends Exception {
     private CellPosition cellPosition;
     private Field field;
+    private FullField fullField;
 
     ParseException() {
     }

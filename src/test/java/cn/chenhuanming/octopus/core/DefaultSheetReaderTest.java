@@ -1,7 +1,10 @@
 package cn.chenhuanming.octopus.core;
 
 import cn.chenhuanming.octopus.core.read.DefaultSheetReader;
-import cn.chenhuanming.octopus.core.read.SheetReader;
+import cn.chenhuanming.octopus.core.temp.configreader.XmlCellDefinitionReader;
+import cn.chenhuanming.octopus.core.temp.reader.ReadContext;
+import cn.chenhuanming.octopus.core.temp.reader.ReadExcelConfig;
+import cn.chenhuanming.octopus.core.temp.reader.SheetReader;
 import cn.chenhuanming.octopus.entity.Applicants;
 import cn.chenhuanming.octopus.core.config.ConfigReader;
 import cn.chenhuanming.octopus.model.DefaultCellPosition;
@@ -41,6 +44,20 @@ public class DefaultSheetReaderTest {
             System.out.println(applicants);
         }
 
+    }
+
+    @Test
+    public void test1() {
+        final XmlCellDefinitionReader xmlCellDefinitionReader = new XmlCellDefinitionReader(this.getClass().getClassLoader().getResourceAsStream("applicants.xml"));
+        ReadExcelConfig config = xmlCellDefinitionReader.loadReadExcelConfig();
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("export.xlsx");
+        ReadContext readContext = new ReadContext(config, is, false);
+
+
+        SheetReader<Applicants> sheetReader = readContext.readSheet(new DefaultCellPosition(4, 0));
+        for (Applicants applicants : sheetReader) {
+            System.out.println(applicants);
+        }
     }
 
 }

@@ -310,7 +310,7 @@ Let's check out XML config
     <Field name="name"
            description="Name"
            color="#ff0000"
-           is-blankable="false"/>
+           is-blankAble="false"/>
 
     <Field name="address"
            description="Address"
@@ -356,9 +356,9 @@ CheckedData(data=Company(name=null, address=Address(city=Mcdonough, detail=1278 
 
 `CheckData` has `data` and `exceptions`.In `exceptions`,it saves all exceptions of every cell occurred in importing.All of them are subclass of `ParseException`
 
-Besides `is-blankable` and `options`,you can apply regular expression validation through `regex`.When validate fails,it will throw corresponding `ParseException`
+Besides `is-blankAble` and `options`,you can apply regular expression validation through `regex`.When validate fails,it will throw corresponding `ParseException`
 
-* `is-blankable`：throws `CanNotBeBlankException`
+* `is-blankAble`：throws `CanNotBeBlankException`
 * `options`：throws `NotAllowValueException`
 * `regex`：throws `PatternNotMatchException`
 

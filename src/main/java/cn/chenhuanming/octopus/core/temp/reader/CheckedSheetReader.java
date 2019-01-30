@@ -1,12 +1,15 @@
-package cn.chenhuanming.octopus.core.read;
+package cn.chenhuanming.octopus.core.temp.reader;
 
-import cn.chenhuanming.octopus.core.Field;
-import cn.chenhuanming.octopus.core.config.ConfigReader;
+import cn.chenhuanming.octopus.core.temp.ExcelConfig;
+import cn.chenhuanming.octopus.core.temp.field.impl.FullField;
+import cn.chenhuanming.octopus.core.temp.field.impl.MappedField;
 import cn.chenhuanming.octopus.exception.CanNotBeBlankException;
 import cn.chenhuanming.octopus.exception.NotAllowValueException;
 import cn.chenhuanming.octopus.exception.ParseException;
 import cn.chenhuanming.octopus.exception.PatternNotMatchException;
-import cn.chenhuanming.octopus.model.*;
+import cn.chenhuanming.octopus.model.CellPosition;
+import cn.chenhuanming.octopus.model.CheckedData;
+import cn.chenhuanming.octopus.model.DefaultCellPosition;
 import cn.chenhuanming.octopus.util.StringUtils;
 import org.apache.poi.ss.usermodel.Sheet;
 
@@ -21,12 +24,12 @@ public class CheckedSheetReader<T> extends DefaultSheetReader<CheckedData<T>> {
      */
     private CheckedData<T> checkedData;
 
-    public CheckedSheetReader(Sheet sheet, ConfigReader configReader, CellPosition startPoint) {
-        super(sheet, configReader, startPoint);
+    public CheckedSheetReader(Sheet sheet, ExcelConfig excelConfig, CellPosition startPoint) {
+        super(sheet, excelConfig, startPoint);
     }
 
     @Override
-    int read(int row, int col, Field field, Object o) {
+    int read(int row, int col, MappedField field, Object o) {
         if (o instanceof CheckedData) {
             return super.read(row, col, field, ((CheckedData) o).getData());
         }
@@ -34,7 +37,7 @@ public class CheckedSheetReader<T> extends DefaultSheetReader<CheckedData<T>> {
     }
 
     @Override
-    protected void setValue(String str, Field field, Object o) throws ParseException {
+    protected void setValue(String str, MappedField field, Object o) throws ParseException {
         if (!field.isBlankable() && StringUtils.isEmpty(str)) {
             throw new CanNotBeBlankException();
         }
@@ -51,8 +54,8 @@ public class CheckedSheetReader<T> extends DefaultSheetReader<CheckedData<T>> {
     }
 
     @Override
-    protected void failWhenParse(int row, int col, Field field, ParseException e) {
-        e.setField(field);
+    protected void failWhenParse(int row, int col, MappedField field, ParseException e) {
+        e.setFullField((FullField) field);
         e.setCellPosition(new DefaultCellPosition(row, col));
         checkedData.getExceptions().add(e);
     }
@@ -60,7 +63,7 @@ public class CheckedSheetReader<T> extends DefaultSheetReader<CheckedData<T>> {
     @Override
     protected CheckedData<T> newInstance(Class classType) {
         try {
-            T data = (T) configReader.getConfig().getClassType().newInstance();
+            T data = (T) excelConfig.getClassType().newInstance();
             checkedData = new CheckedData<>();
             checkedData.setData(data);
             return checkedData;

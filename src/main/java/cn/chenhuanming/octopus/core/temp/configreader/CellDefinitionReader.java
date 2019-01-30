@@ -1,4 +1,4 @@
-package cn.chenhuanming.octopus.core.temp;
+package cn.chenhuanming.octopus.core.temp.configreader;
 
 import cn.chenhuanming.octopus.core.temp.reader.ReadExcelConfig;
 import cn.chenhuanming.octopus.core.temp.writer.WriteExcelConfig;

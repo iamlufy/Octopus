@@ -1,14 +1,12 @@
-package cn.chenhuanming.octopus.core.read;
+package cn.chenhuanming.octopus.core.temp.reader;
 
-import cn.chenhuanming.octopus.core.config.ConfigReader;
-import cn.chenhuanming.octopus.core.temp.reader.SheetReader;
+import cn.chenhuanming.octopus.core.temp.ExcelConfig;
+import cn.chenhuanming.octopus.core.temp.field.impl.MappedField;
 import cn.chenhuanming.octopus.exception.ParseException;
-import cn.chenhuanming.octopus.model.CellPosition;
-import cn.chenhuanming.octopus.core.Field;
 import cn.chenhuanming.octopus.formatter.Formatter;
+import cn.chenhuanming.octopus.model.CellPosition;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.util.Iterator;
@@ -17,29 +15,29 @@ import java.util.Iterator;
  * @author chenhuanming
  * Created at 2018/12/20
  */
+@Slf4j
 public abstract class AbstractSheetReader<T> implements SheetReader<T> {
-    protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractSheetReader.class);
 
     protected Sheet sheet;
-    protected ConfigReader configReader;
+    protected ExcelConfig excelConfig;
     protected CellPosition startPoint;
 
-    public AbstractSheetReader(Sheet sheet, ConfigReader configReader, CellPosition startPoint) {
-        if (sheet == null || this.configReader == null || startPoint == null) {
+    public AbstractSheetReader(Sheet sheet, ExcelConfig excelConfig, CellPosition startPoint) {
+        if (sheet == null || excelConfig == null || startPoint == null) {
             throw new NullPointerException();
         }
         this.sheet = sheet;
-        this.configReader = configReader;
+        this.excelConfig = excelConfig;
 
         this.startPoint = startPoint;
     }
 
     @Override
     public T get(int i) {
-        T t = newInstance(configReader.getConfig().getClassType());
+        T t = newInstance(excelConfig.getClassType());
 
         int col = startPoint.getCol();
-        for (Field field : configReader.getConfig().getFields()) {
+        for (MappedField field : excelConfig.getFields()) {
             col = read(startPoint.getRow() + i, col, field, t);
         }
         return t;
@@ -52,15 +50,15 @@ public abstract class AbstractSheetReader<T> implements SheetReader<T> {
      * @param field
      * @param o
      */
-    protected void setValue(String str, Field field, Object o) throws ParseException {
+    protected void setValue(String str, MappedField field, Object o) throws ParseException {
         Method pusher = field.getPusher();
 
         Object value = null;
 
-        if (field.getFormatter() != null) {
-            value = field.getFormatter().parse(str);
+        if (field.getFieldProperty().getFormatter() != null) {
+            value = field.getFieldProperty().getFormatter().parse(str);
         } else {
-            Formatter globalFormatter = configReader.getConfig().getFormatterContainer().get(pusher.getParameterTypes()[0]);
+            Formatter globalFormatter = excelConfig.getFormatterContainer().get(pusher.getParameterTypes()[0]);
             if (globalFormatter != null) {
                 value = globalFormatter.parse(str);
             } else {
@@ -73,14 +71,14 @@ public abstract class AbstractSheetReader<T> implements SheetReader<T> {
                 pusher.invoke(o, value);
             }
         } catch (Exception e) {
-            LOGGER.error("can not set value:" + field.getName(), e);
+            log.error("can not set value:" + field.getFieldProperty().getName(), e);
             throw new ParseException("invoke method failed", e);
         }
     }
 
     protected T newInstance(Class classType) {
         try {
-            return (T) configReader.getConfig().getClassType().newInstance();
+            return (T) excelConfig.getClassType().newInstance();
         } catch (Exception e) {
             throw new IllegalArgumentException("wrong type or no default constructor", e);
         }
@@ -91,7 +89,7 @@ public abstract class AbstractSheetReader<T> implements SheetReader<T> {
         return sheet.getLastRowNum() + 1;
     }
 
-    abstract int read(int row, int col, Field field, Object o);
+    abstract int read(int row, int col, MappedField field, Object o);
 
     @Override
     public Iterator<T> iterator() {

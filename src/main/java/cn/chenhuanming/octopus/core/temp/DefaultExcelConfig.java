@@ -1,6 +1,7 @@
 package cn.chenhuanming.octopus.core.temp;
 
-import cn.chenhuanming.octopus.core.temp.field.MappedField;
+import cn.chenhuanming.octopus.core.temp.field.impl.FullField;
+import cn.chenhuanming.octopus.core.temp.field.impl.MappedField;
 import cn.chenhuanming.octopus.formatter.FormatterContainer;
 import lombok.Data;
 

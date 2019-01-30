@@ -301,7 +301,7 @@ Company(name=Toccoa Development, address=Address(city=Ridgeville, detail=1790 La
     <Field name="name"
            description="Name"
            color="#ff0000"
-           is-blankable="false"/>
+           is-blankAble="false"/>
 
     <Field name="address"
            description="Address"
@@ -348,9 +348,9 @@ CheckedData(data=Company(name=null, address=Address(city=Mcdonough, detail=1278 
 可以看到每一个`CheckData`有一个`data`属性和一个`exceptions`列表。
 这个异常列表存放着导入时每一个单元格可能出现的校验错误，异常类型都是`ParseException`
 
-除了`is-blankable`和`options`，还可以通过`regex`配置正则表达式检查。当校验错误时，会抛出对应的`ParseException`子类
+除了`is-blankAble`和`options`，还可以通过`regex`配置正则表达式检查。当校验错误时，会抛出对应的`ParseException`子类
 
-* `is-blankable`：抛出 `CanNotBeBlankException`
+* `is-blankAble`：抛出 `CanNotBeBlankException`
 * `options`：抛出 `NotAllowValueException`
 * `regex`：抛出 `PatternNotMatchException`
 

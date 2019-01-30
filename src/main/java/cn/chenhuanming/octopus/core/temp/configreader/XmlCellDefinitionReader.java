@@ -1,20 +1,13 @@
-package cn.chenhuanming.octopus.core.temp.reader;
+package cn.chenhuanming.octopus.core.temp.configreader;
 
-import cn.chenhuanming.octopus.core.config.AbstractXMLConfigReader;
-import cn.chenhuanming.octopus.core.config.Config;
-import cn.chenhuanming.octopus.core.config.DefaultConfig;
 import cn.chenhuanming.octopus.core.temp.DefaultExcelConfig;
-import cn.chenhuanming.octopus.core.temp.ExcelConfig;
 import cn.chenhuanming.octopus.core.temp.field.FieldProperty;
-import cn.chenhuanming.octopus.core.temp.field.FieldStyle;
-import cn.chenhuanming.octopus.core.temp.field.FullField;
-import cn.chenhuanming.octopus.core.temp.field.MappedField;
+import cn.chenhuanming.octopus.core.temp.field.impl.FieldStyle;
+import cn.chenhuanming.octopus.core.temp.field.impl.FullField;
 import cn.chenhuanming.octopus.formatter.DateFormatter;
 import cn.chenhuanming.octopus.formatter.DefaultFormatterContainer;
 import cn.chenhuanming.octopus.formatter.Formatter;
 import cn.chenhuanming.octopus.formatter.FormatterContainer;
-import cn.chenhuanming.octopus.model.DefaultField;
-import cn.chenhuanming.octopus.core.Field;
 import cn.chenhuanming.octopus.util.ColorUtils;
 import cn.chenhuanming.octopus.util.ReflectionUtils;
 import cn.chenhuanming.octopus.util.StringUtils;
@@ -94,7 +87,7 @@ public class XmlCellDefinitionReader extends AbstractCellDefinitionReader {
         }
 
         Node formattersNode = root.getElementsByTagName(XMLConfig.Formatters.name).item(0);
-        config.setFormatterContainer(readFormatter(formattersNode));
+        config. setFormatterContainer(readFormatter(formattersNode));
 
         FullField field = getField(root, classType);
 
@@ -108,7 +101,7 @@ public class XmlCellDefinitionReader extends AbstractCellDefinitionReader {
 
         String dateFormat = getAttribute(formatNode, XMLConfig.Formatters.Attribute.DATE_FORMAT);
         if (StringUtils.isEmpty(dateFormat)) {
-            container.addFormat(Date.class, new DateFormatter("yyyy-MM-dd HH:mm:ss"));
+            container.addFormat(Date.class, new DateFormatter("yyyy-MM-dd"));
         } else {
             container.addFormat(Date.class, new DateFormatter(dateFormat));
         }

@@ -1,12 +1,12 @@
-package cn.chenhuanming.octopus.core.temp.field;
+package cn.chenhuanming.octopus.core.temp.field.impl;
 
 import cn.chenhuanming.octopus.core.read.ImportValidation;
+import cn.chenhuanming.octopus.core.temp.field.FieldProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * 匹配配置文件的属性，含有扩展属性
@@ -16,17 +16,13 @@ import java.util.regex.Pattern;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class FullField extends MappedField  implements ImportValidation {
-
-    private boolean blankable;
-
-    private List<String> options;
-
-    private Pattern regex;
+public class FullField extends MappedField {
 
 
-    private Method picker;
-    private Method pusher;
+
+
+    protected Method picker;
+
 
     /**
      * excel单元格格式
@@ -46,7 +42,7 @@ public class FullField extends MappedField  implements ImportValidation {
         this.setBlankable(true);
     }
 
-    public FullField(FieldProperty fieldProperty,List<MappedField> children) {
+    public FullField(FieldProperty fieldProperty,List<FullField> children) {
         this.setFieldProperty(fieldProperty);
         this.setChildren(children);
 
