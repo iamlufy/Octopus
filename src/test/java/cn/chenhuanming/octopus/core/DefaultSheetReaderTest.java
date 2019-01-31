@@ -1,7 +1,7 @@
 package cn.chenhuanming.octopus.core;
 
 import cn.chenhuanming.octopus.core.read.DefaultSheetReader;
-import cn.chenhuanming.octopus.core.temp.configreader.XmlCellDefinitionReader;
+import cn.chenhuanming.octopus.core.temp.configreader.XmlExcelConfigReader;
 import cn.chenhuanming.octopus.core.temp.reader.ReadContext;
 import cn.chenhuanming.octopus.core.temp.reader.ReadExcelConfig;
 import cn.chenhuanming.octopus.core.temp.reader.SheetReader;
@@ -48,7 +48,7 @@ public class DefaultSheetReaderTest {
 
     @Test
     public void test1() {
-        final XmlCellDefinitionReader xmlCellDefinitionReader = new XmlCellDefinitionReader(this.getClass().getClassLoader().getResourceAsStream("applicants.xml"));
+        final XmlExcelConfigReader xmlCellDefinitionReader = new XmlExcelConfigReader(this.getClass().getClassLoader().getResourceAsStream("applicants.xml"));
         ReadExcelConfig config = xmlCellDefinitionReader.loadReadExcelConfig();
         InputStream is = this.getClass().getClassLoader().getResourceAsStream("export.xlsx");
         ReadContext readContext = new ReadContext(config, is, false);

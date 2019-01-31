@@ -2,6 +2,7 @@ package cn.chenhuanming.octopus.core.temp.reader;
 
 
 import cn.chenhuanming.octopus.core.temp.ExcelConfig;
+import cn.chenhuanming.octopus.core.temp.field.Field;
 import cn.chenhuanming.octopus.core.temp.field.impl.MappedField;
 import cn.chenhuanming.octopus.exception.ParseException;
 import cn.chenhuanming.octopus.formatter.Formatter;
@@ -28,7 +29,7 @@ public class DefaultSheetReader<T> extends AbstractSheetReader<T> {
     }
 
     @Override
-    int read(int row, int col, MappedField field, Object o) {
+    int read(int row, int col, Field field, Object o) {
         if (field.isLeaf()) {
 
             try {
@@ -50,9 +51,10 @@ public class DefaultSheetReader<T> extends AbstractSheetReader<T> {
         }
 
         Object instance = ReflectionUtils.newInstance(field.getPusher().getParameterTypes()[0]);
-        for (MappedField child : field.getChildren()) {
+        for (Field child : field.getChildren()) {
+            MappedField mappedField = (MappedField) child;
             if (instance != null) {
-                col = read(row, col, child, instance);
+                col = read(row, col, mappedField, instance);
                 try {
                     field.getPusher().invoke(o, instance);
                 } catch (Exception e) {
@@ -63,7 +65,7 @@ public class DefaultSheetReader<T> extends AbstractSheetReader<T> {
         return col;
     }
 
-    protected void failWhenParse(int row, int col, final MappedField field, ParseException e) {
+    protected void failWhenParse(int row, int col, final Field field, ParseException e) {
         log.error("failed to read value from " + field.getFieldProperty().getName() + " in excel(" + (row + 1) + "," + col + ")", e);
     }
 }

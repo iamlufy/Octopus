@@ -2,6 +2,7 @@ package cn.chenhuanming.octopus.core.temp.reader;
 
 import cn.chenhuanming.octopus.core.config.ConfigReader;
 import cn.chenhuanming.octopus.core.temp.ExcelConfig;
+import cn.chenhuanming.octopus.core.temp.configreader.XmlExcelConfigReader;
 import cn.chenhuanming.octopus.core.temp.reader.ReadExcelConfig;
 import cn.chenhuanming.octopus.core.temp.writer.WriteExcelConfig;
 import cn.chenhuanming.octopus.model.CellPosition;
@@ -29,6 +30,18 @@ public class ReadContext<T> {
         Workbook workbook = null;
         try {
             workbook = WorkbookFactory.create(in);
+        } catch (IOException | InvalidFormatException e) {
+            e.printStackTrace();
+        }
+        init(readExcelConfig, isCheck, workbook);
+    }
+
+    public ReadContext( InputStream configStream,InputStream excelStream,boolean isCheck) {
+        final XmlExcelConfigReader xmlCellDefinitionReader = new XmlExcelConfigReader(configStream);
+        ReadExcelConfig config = xmlCellDefinitionReader.loadReadExcelConfig();
+        Workbook workbook = null;
+        try {
+            workbook = WorkbookFactory.create(excelStream);
         } catch (IOException | InvalidFormatException e) {
             e.printStackTrace();
         }

@@ -9,7 +9,7 @@ import java.io.IOException;
  * @author zhuangzf
  * @date 2019/1/16 10:16
  */
-public interface CellDefinitionReader {
+public interface ExcelConfigReader {
 
     /**
      *

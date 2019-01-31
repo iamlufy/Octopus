@@ -1,6 +1,7 @@
 package cn.chenhuanming.octopus.core.temp.reader;
 
 import cn.chenhuanming.octopus.core.temp.ExcelConfig;
+import cn.chenhuanming.octopus.core.temp.field.Field;
 import cn.chenhuanming.octopus.core.temp.field.impl.MappedField;
 import cn.chenhuanming.octopus.exception.ParseException;
 import cn.chenhuanming.octopus.formatter.Formatter;
@@ -37,7 +38,7 @@ public abstract class AbstractSheetReader<T> implements SheetReader<T> {
         T t = newInstance(excelConfig.getClassType());
 
         int col = startPoint.getCol();
-        for (MappedField field : excelConfig.getFields()) {
+        for (Field field : excelConfig.getFields()) {
             col = read(startPoint.getRow() + i, col, field, t);
         }
         return t;
@@ -50,7 +51,7 @@ public abstract class AbstractSheetReader<T> implements SheetReader<T> {
      * @param field
      * @param o
      */
-    protected void setValue(String str, MappedField field, Object o) throws ParseException {
+    protected void setValue(String str, Field field, Object o) throws ParseException {
         Method pusher = field.getPusher();
 
         Object value = null;
@@ -89,7 +90,7 @@ public abstract class AbstractSheetReader<T> implements SheetReader<T> {
         return sheet.getLastRowNum() + 1;
     }
 
-    abstract int read(int row, int col, MappedField field, Object o);
+    abstract int read(int row, int col, Field field, Object o);
 
     @Override
     public Iterator<T> iterator() {

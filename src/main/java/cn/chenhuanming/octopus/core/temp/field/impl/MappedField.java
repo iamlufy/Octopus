@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  * @date 2019/1/21 19:26
  */
 @Data
-public class MappedField implements Field,ImportValidation {
+public class MappedField implements Field {
 
     protected boolean blankable;
 
@@ -29,11 +29,12 @@ public class MappedField implements Field,ImportValidation {
     protected FieldProperty fieldProperty;
 
 
-    protected List<? extends MappedField> children;
+    protected List<Field> children;
 
     private Method pusher;
 
 
+    @Override
     public boolean isLeaf() {
         return getChildren() == null || getChildren().size() == 0;
     }

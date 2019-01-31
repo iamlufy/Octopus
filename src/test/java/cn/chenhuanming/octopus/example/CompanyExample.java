@@ -1,7 +1,7 @@
 package cn.chenhuanming.octopus.example;
 
 import cn.chenhuanming.octopus.core.Octopus;
-import cn.chenhuanming.octopus.core.temp.configreader.XmlCellDefinitionReader;
+import cn.chenhuanming.octopus.core.temp.configreader.XmlExcelConfigReader;
 import cn.chenhuanming.octopus.core.temp.reader.ReadContext;
 import cn.chenhuanming.octopus.core.temp.reader.ReadExcelConfig;
 import cn.chenhuanming.octopus.core.temp.reader.SheetReader;
@@ -82,7 +82,7 @@ public class CompanyExample {
         try {
             SheetReader<Company> importData = Octopus.readFirstSheet(fis, configReader, new DefaultCellPosition(1, 0));
 
-            final XmlCellDefinitionReader xmlCellDefinitionReader = new XmlCellDefinitionReader(fis);
+            final XmlExcelConfigReader xmlCellDefinitionReader = new XmlExcelConfigReader(fis);
             ReadExcelConfig config = xmlCellDefinitionReader.loadReadExcelConfig();
             ReadContext readContext = new ReadContext(config, is, false);
             importData = readContext.readSheet(new DefaultCellPosition(1, 0));

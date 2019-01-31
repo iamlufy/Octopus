@@ -1,6 +1,7 @@
 package cn.chenhuanming.octopus.core.temp.field.impl;
 
 import cn.chenhuanming.octopus.core.read.ImportValidation;
+import cn.chenhuanming.octopus.core.temp.field.Field;
 import cn.chenhuanming.octopus.core.temp.field.FieldProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -42,7 +43,7 @@ public class FullField extends MappedField {
         this.setBlankable(true);
     }
 
-    public FullField(FieldProperty fieldProperty,List<FullField> children) {
+    public FullField(FieldProperty fieldProperty,List<Field> children) {
         this.setFieldProperty(fieldProperty);
         this.setChildren(children);
 

@@ -3,6 +3,8 @@ package cn.chenhuanming.octopus.core;
 import cn.chenhuanming.octopus.core.read.CheckedExcelReader;
 import cn.chenhuanming.octopus.core.read.DefaultExcelReader;
 import cn.chenhuanming.octopus.core.read.ExcelReader;
+import cn.chenhuanming.octopus.core.temp.ExcelConfig;
+import cn.chenhuanming.octopus.core.temp.reader.CheckedSheetReader;
 import cn.chenhuanming.octopus.core.temp.reader.SheetReader;
 import cn.chenhuanming.octopus.core.write.DefaultExcelWriter;
 import cn.chenhuanming.octopus.core.write.DefaultSheetWriter;

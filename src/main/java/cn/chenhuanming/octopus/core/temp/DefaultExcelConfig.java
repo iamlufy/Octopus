@@ -1,7 +1,6 @@
 package cn.chenhuanming.octopus.core.temp;
 
-import cn.chenhuanming.octopus.core.temp.field.impl.FullField;
-import cn.chenhuanming.octopus.core.temp.field.impl.MappedField;
+import cn.chenhuanming.octopus.core.temp.field.Field;
 import cn.chenhuanming.octopus.formatter.FormatterContainer;
 import lombok.Data;
 
@@ -15,5 +14,5 @@ import java.util.List;
 public class DefaultExcelConfig implements ExcelConfig {
     private Class classType;
     private FormatterContainer formatterContainer;
-    private List<? extends MappedField> fields;
+    private List<Field> fields;
 }

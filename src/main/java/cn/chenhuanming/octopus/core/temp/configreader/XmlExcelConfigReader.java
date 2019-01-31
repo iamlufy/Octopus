@@ -1,6 +1,8 @@
 package cn.chenhuanming.octopus.core.temp.configreader;
 
 import cn.chenhuanming.octopus.core.temp.DefaultExcelConfig;
+import cn.chenhuanming.octopus.core.temp.ExcelConfig;
+import cn.chenhuanming.octopus.core.temp.field.Field;
 import cn.chenhuanming.octopus.core.temp.field.FieldProperty;
 import cn.chenhuanming.octopus.core.temp.field.impl.FieldStyle;
 import cn.chenhuanming.octopus.core.temp.field.impl.FullField;
@@ -42,13 +44,13 @@ import java.util.regex.Pattern;
  * @author zhuangzf
  */
 @Slf4j
-public class XmlCellDefinitionReader extends AbstractCellDefinitionReader {
+public class XmlExcelConfigReader extends AbstractExcelConfigReader {
     private static final String SCHEMA_URI = "https://raw.githubusercontent.com/zerouwar/my-maven-repo/master/cn/chenhuanming/octopus/1.0.0/octopus.xsd";
     private static final String SPLITTER = "\\|";
 
 
     private final ByteArrayInputStream is;
-    public XmlCellDefinitionReader(InputStream is) {
+    public XmlExcelConfigReader(InputStream is) {
         try {
             this.is = new ByteArrayInputStream(IOUtils.toByteArray(is));
         } catch (IOException e) {
@@ -58,7 +60,7 @@ public class XmlCellDefinitionReader extends AbstractCellDefinitionReader {
     
 
     @Override
-    public DefaultExcelConfig readConfig() {
+    public ExcelConfig readConfig() {
         Document document;
         try {
             validateXML(new StreamSource(is));
@@ -89,7 +91,7 @@ public class XmlCellDefinitionReader extends AbstractCellDefinitionReader {
         Node formattersNode = root.getElementsByTagName(XMLConfig.Formatters.name).item(0);
         config. setFormatterContainer(readFormatter(formattersNode));
 
-        FullField field = getField(root, classType);
+        Field field = getField(root, classType);
 
         config.setFields(field.getChildren());
 
@@ -131,14 +133,13 @@ public class XmlCellDefinitionReader extends AbstractCellDefinitionReader {
 
 
 
-    private FullField getField(Node node, Class classType) {
+    private Field getField(Node node, Class classType) {
         FullField field = new FullField();
 
         FieldProperty fieldProperty = setBaseConfig( node);
         FieldStyle fieldStyle = setCellStyleConfig(node);
         field.setFieldProperty(fieldProperty);
         field.setFieldStyle(fieldStyle);
-        // TODO: 2019/1/21
         setInvoker(field, classType);
 
         if (node.getNodeName().equals(XMLConfig.Field.name)) {
@@ -147,7 +148,7 @@ public class XmlCellDefinitionReader extends AbstractCellDefinitionReader {
 
         NodeList children = node.getChildNodes();
 
-        List<FullField> mappedFieldList = Lists.newArrayList();
+        List<Field> mappedFieldList = Lists.newArrayList();
 
         Class headerType = node.getNodeName().equals(XMLConfig.Root.name) ? classType : (field.getPicker() != null ? field.getPicker().getReturnType() : null);
         for (int i = 0; i < children.getLength(); i++) {

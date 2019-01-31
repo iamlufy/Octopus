@@ -2,7 +2,7 @@ package cn.chenhuanming.octopus.core;
 
 import cn.chenhuanming.octopus.core.config.ConfigReader;
 import cn.chenhuanming.octopus.core.temp.DefaultExcelConfig;
-import cn.chenhuanming.octopus.core.temp.configreader.XmlCellDefinitionReader;
+import cn.chenhuanming.octopus.core.temp.configreader.XmlExcelConfigReader;
 import org.junit.Test;
 
 import java.io.FileOutputStream;
@@ -21,7 +21,7 @@ public class OctopusTest extends AbstractWriterTest {
 
         ConfigReader configReader = Octopus.getXMLConfigReader(this.getClass().getClassLoader().getResourceAsStream("applicants.xml"));
 //        final Config config1 = configReader.getConfig();9 777  6 m,
-        final XmlCellDefinitionReader xmlCellDefinitionReader = new XmlCellDefinitionReader(this.getClass().getClassLoader().getResourceAsStream("applicants.xml"));
+        final XmlExcelConfigReader xmlCellDefinitionReader = new XmlExcelConfigReader(this.getClass().getClassLoader().getResourceAsStream("applicants.xml"));
         DefaultExcelConfig config = xmlCellDefinitionReader.readConfig();
         System.out.println();
 //        Octopus.writeOneSheet(os, configReader, "test", applicantsList);
